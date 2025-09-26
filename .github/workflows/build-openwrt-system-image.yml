@@ -271,7 +271,7 @@ jobs:
           sudo -E apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
           sudo -E apt-get -y install $(curl -fsSL https://tinyurl.com/ubuntu2204-make-openwrt)
           # 1085680176
-          sudo -E apt-get -y install clang genisoimage iptables libiptc-dev llvm subversion 
+          sudo -E apt-get -y install clang genisoimage iptables libiptc-dev llvm subversion libmbedtls-dev libmbedtls-dev    
           # 1085680176
           sudo -E systemctl daemon-reload
           # sudo -E apt-get -y full-upgrade
@@ -373,12 +373,12 @@ jobs:
         run: |
           cd openwrt/
           # 1085680176
-          # chown -R $(whoami):$(whoami) /builder/openwrt
-          # chmod +x -R  /builder/openwrt
+          chown -R $(whoami):$(whoami) /builder/openwrt
+          chmod +x -R  /builder/openwrt
           # 1085680176
           echo -e "$(nproc) thread compile"
-          # make -j$(($(nproc) + 1)) V=s || make -j1 || make -j1 V=s
-          make -j1 V=s
+          make -j$(($(nproc) + 1)) V=s || make -j1 || make -j1 V=s
+          # make -j1 V=s
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Clear server space
@@ -435,7 +435,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             ### OpenWrt Image information
-            - Default IP: 192.168.144.2
+            - Default IP: 192.168.1.1
             - Default username: root
             - Default password: password
             - Default WIFI name: OpenWrt
